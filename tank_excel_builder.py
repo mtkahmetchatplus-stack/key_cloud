@@ -428,74 +428,145 @@ for mname, items, toplam in manhol_all:
         DATA(ws7, row, list(range(1,8)), it, alt=(i%2==1)); row += 1
     TOT(ws7, row, 1, 6, f"TOPLAM AĞIRLIK: {toplam} Kg", toplam)
     C(ws7, row, 7, "", H1, fw, CA, TB); row += 2
+# ── Tank İsim Plakası & Merdiven bölümlerini ws7'ye ekle ────────────
+
+# Tank İsim Plakası
+ti_items = [
+    (1,1,"⊏ 215×6 ......... 230","S275J2",2.33,2.33,"Kesim"),
+    (2,1,"⊏ 230×6 ......... 230","S275J2",2.33,2.33,"Kesim"),
+    (3,2,"⊏ 25×6 ......... 230","S275J2",0.26,0.52,"Kesim"),
+    (4,4,'BOLT/NVT NO.5-40 UNC',"304 S.S","–","–","Montaj"),
+]
+SUB(ws7, row, 1, 7, "TANK İSİM PLAKASI  (1 Adet)"); row += 1
+HDR(ws7, row, list(range(1,8)),
+    ["POZ","ADET","AÇIKLAMA","MALZEME","BİRİM\nAĞIRLIK(kg)","TOPLAM\nAĞIRLIK(kg)","İŞLEM TÜRÜ"], h=30)
+row += 1
+for i, it in enumerate(ti_items):
+    DATA(ws7, row, list(range(1,8)), it, alt=(i%2==1)); row += 1
+TOT(ws7, row, 1, 6, "TOPLAM AĞIRLIK: 5.18 Kg", 5.18)
+C(ws7, row, 7, "", H1, fw, CA, TB); row += 2
+
+# Merdiven (Staircase) Malzeme Listesi
+merd_items = [
+    (1, 1,"⊏ 8×200 ......... 7550.5","S235JR", 94.8,  94.8,"Kesim"),
+    (2, 1,"⊏ 8×200 ......... 972.5", "S235JR", 12.2,  12.2,"Kesim"),
+    (3, 1,"⊏ 8×200 ......... 6190",  "S235JR", 77.7,  77.7,"Kesim"),
+    (4, 1,"⊏ 8×200 ......... 899.5", "S235JR", 11.3,  11.3,"Kesim"),
+    (5, 1,"⊏ 8×200 ......... 8057.5","S235JR",101.4, 101.4,"Kesim"),
+    (6, 1,"⊏ 8×200 ......... 1069.5","S235JR", 13.4,  13.4,"Kesim"),
+    (7, 1,"⊏ 8×200 ......... 6603.5","S235JR", 82.9,  82.9,"Kesim"),
+    (8, 1,"⊏ 8×200 ......... 1002.5","S235JR", 12.6,  12.6,"Kesim"),
+    (9,37,"L60×6 ......... 1079",    "S235JR",  5.4, 248.4,"Kesim"),
+    (10,1,"⊏ 8×200 ......... 750",   "S235JR",  9.4,   9.4,"Kesim"),
+    (11,1,"NPU100 ......... 1080",   "S235JR", 11.5, 138.0,"Kesim"),
+    (12,12,"NPU100 ......... 1178.5","S235JR", 12.5, 150.0,"Kesim"),
+    (13,24,"⊏ 8×100 ......... 260",  "S355J2",  1.6,  38.4,"Kesim"),
+    (14,22,"L60×6 ......... 325.5",  "S235JR",  1.7,  37.4,"Kesim"),
+    ("14A",2,"L60×6 ......... 325.5","S235JR",  1.7,   3.4,"Kesim"),
+    (15,12,"⊏ 8×70 ......... 180",   "S235JR",  0.8,   9.6,"Kesim"),
+    (16, 2,"L60×6 ......... 899.5",  "S235JR",  4.9,   9.8,"Kesim"),
+    (17, 4,"L60×6 ......... 630",    "S235JR",  5.4,  21.6,"Kesim"),
+    (18, 2,"L60×6 ......... 1002.5", "S235JR",  5.5,  11.0,"Kesim"),
+    (19, 5,"L60×6 ......... 1238",   "S235JR",  5.4,  27.0,"Kesim"),
+    (20,26,"L60×6 ......... 1020",   "S235JR",  5.4, 140.4,"Kesim"),
+    (21, 1,"HANDRAİL (1 1/4\" STD.SCH PIPE) 70000","S235JR",178.5,178.5,"Kesim+Bükme"),
+    (22, 1,"⊏ 5×50 ......... 70000", "S235JR",137.5, 137.5,"Kesim"),
+    (23, 1,"⊏ 5×150 ......... 34000","S235JR",200.0, 200.0,"Kesim"),
+    # Bağlantı elemanları
+    (None,48,"M10×30  BOLT", "A193 GR B7","–","–","Montaj"),
+    (None,48,"M10  NUT",     "A194 GR 2H","–","–","Montaj"),
+    (None,48,"M10  WASHER",  "A194 GR 2H","–","–","Montaj"),
+    (None,136,"M12×40  BOLT","A193 GR B7","–","–","Montaj"),
+    (None,136,"M12  NUT",    "A194 GR 2H","–","–","Montaj"),
+    (None,136,"M12  WASHER", "A194 GR 2H","–","–","Montaj"),
+]
+SUB(ws7, row, 1, 7, "MERDİVEN + KORKULUK  (1 Komple)"); row += 1
+HDR(ws7, row, list(range(1,8)),
+    ["POZ","ADET","AÇIKLAMA","MALZEME","BİRİM\nAĞIRLIK(kg)","TOPLAM\nAĞIRLIK(kg)","İŞLEM TÜRÜ"], h=30)
+row += 1
+for i, it in enumerate(merd_items):
+    DATA(ws7, row, list(range(1,8)), it, alt=(i%2==1)); row += 1
+TOT(ws7, row, 1, 6, "TOPLAM AĞIRLIK: 1777.0 Kg", 1777.0)
+C(ws7, row, 7, "", H1, fw, CA, TB); row += 2
+
 sw(ws7,[8,8,44,20,14,14,22])
 
 # ═══════════════════════════════════════════════════════════════════
-# SAYFA 8 – KONİK ÇATI İSKELETİ (Yapısal)
+# SAYFA 8 – KONİK ÇATI İSKELETİ (Yapısal)  — Çizim image 5 verileri
 # ═══════════════════════════════════════════════════════════════════
 ws8 = wb.create_sheet("Konik Çatı İskeleti"); ws8.sheet_view.showGridLines = False
-TITLE(ws8, 1, 1, 8, "KONİK ÇATI YAPISAL İSKELET MALZEME LİSTESİ  (Çizim: KEY199MECEQP2004)")
+TITLE(ws8, 1, 1, 9, "KONİK ÇATI YAPISAL İSKELET MALZEME LİSTESİ  (TOPLAM: 5454.0 kg)")
 
-sub_groups = [
-    ("CK1 MONTAJ GRUBU  (12 Adet)  —  Rafterlar UNP240", [
-        ("P1",1,"UNP240","S235JR",5685,188.8,12*188.8),
-        ("P20",2,"PL10×113  PLAKA","S235JR",221,1.8,12*3.6),
-        ("P21",2,"PL10×98   PLAKA","S235JR",182,1.4,12*2.8),
-        ("P22",1,"PL10×221  PLAKA","S235JR",193,2.7,12*2.7),
-        ("P23",1,"PL10×162  PLAKA","S235JR",216,1.9,12*1.9),
-    ], "Kesim+Kaynak"),
-    ("CK2 MONTAJ GRUBU  (12 Adet)  —  Rafterlar UNP240", [
-        ("P1",1,"UNP240","S235JR",5685,188.8,12*188.8),
-        ("P20",2,"PL10×113  PLAKA","S235JR",221,1.8,12*3.6),
-        ("P21",2,"PL10×98   PLAKA","S235JR",182,1.4,12*2.8),
-        ("P24",1,"PL10×189  PLAKA","S235JR",232,2.8,12*2.8),
-        ("P25",1,"PL10×139  PLAKA","S235JR",244,2.0,12*2.0),
-    ], "Kesim+Kaynak"),
-    ("KL1 MONTAJ GRUBU  (1 Adet)  —  Merkezi Kolon PIP 323.9×8", [
-        ("P2",1,"PIP 323.9×8  BORU","S235JR",9369,580.2,580.2),
-        ("P9",1,"PL25×1800  PLAKA","S235JR",1800,497.3,497.3),
-        ("P10",1,"PL15×250  PLAKA","S235JR",4618,137.1,137.1),
-    ], "Kesim+Kaynak"),
+# Her grup: (grup adı, toplam adet, [(poz, adet/asm, profil, malz, boy_mm, birim_kg, 1asm_toplam)])
+catim_grp = [
+    ("CK1  —  UNP240 Rafter  (12 çatım adedi)", 12, [
+        ("P1",  1, "UNP240",         "S235JR", 5685, 155.5, 155.5),
+        ("P20", 2, "PL10×113  Plaka","S235JR",  221,   1.8,   3.6),
+        ("P21", 2, "PL10×95   Plaka","S235JR",  152,   1.3,   2.5),
+        ("P22", 1, "PL10×221  Plaka","S235JR",  193,   2.7,   2.7),
+        ("P23", 1, "PL10×162  Plaka","S235JR",  216,   1.9,   1.9),
+    ]),
+    ("CK2  —  UNP240 Rafter  (12 çatım adedi)", 12, [
+        ("P1",  1, "UNP240",         "S235JR", 5685, 155.5, 155.5),
+        ("P20", 2, "PL10×113  Plaka","S235JR",  221,   1.8,   3.6),
+        ("P21", 2, "PL10×95   Plaka","S235JR",  152,   1.3,   2.5),
+        ("P24", 1, "PL10×189  Plaka","S235JR",  232,   2.5,   2.5),
+        ("P25", 1, "PL10×139  Plaka","S235JR",  244,   2.0,   2.0),
+    ]),
+    ("CK3  —  UNP200 Purlin  (24 adet)", 24, [
+        ("P5",  1, "UNP200",         "S235JR", 1227,  31.0,  31.0),
+    ]),
+    ("CK4  —  UNP200 Purlin  (24 adet)", 24, [
+        ("P6",  1, "UNP200",         "S235JR",  677,  17.1,  17.1),
+    ]),
+    ("KL1  —  Merkezi Kolon PIP 323.9×8  (1 adet)", 1, [
+        ("P2",  1, "PIP 323.9×8  Boru",  "S235JR", 9369, 580.2, 580.2),
+        ("P9",  1, "PL25×1800  Plaka",   "S235JR", 1800, 497.3, 497.3),
+        ("P10", 1, "PL15×250   Plaka",   "S235JR", 4618, 137.1, 137.1),
+        ("P11", 1, "PL10×200   Plaka",   "S235JR", 5341,  84.2,  84.2),
+        ("P12", 1, "PL25×750   Plaka",   "S235JR",  750,  56.0,  56.0),
+        ("P16",24, "PL10×150   Plaka",   "S235JR",  250,   2.3,  55.3),
+        ("P17", 4, "PL10×513   Plaka",   "S235JR",  675,  13.3,  53.2),
+        ("P18", 1, "PL20×600   Plaka",   "S235JR",  600,  43.9,  43.9),
+    ]),
+    ("W1  —  Ayak Gusset Grubu  (24 adet)", 24, [
+        ("P3",  1, "PL10×300  Plaka",    "S235JR",  300,   7.1,   7.1),
+        ("P13", 1, "PL10×200  Plaka",    "S235JR",  250,   3.9,   3.9),
+        ("P14", 1, "PL10×200  Plaka",    "S235JR",  100,   1.6,   1.6),
+        ("P15", 1, "PL10×248  Plaka",    "S235JR",  299,   4.2,   4.2),
+    ]),
+    ("W2  —  Üst Halka Plakası  (1 adet)", 1, [
+        ("P4",  1, "PL15×750  Plaka",    "S235JR",  750,  51.6,  51.6),
+        ("P19", 1, "PL15×100  Plaka",    "S235JR", 1916,  23.0,  23.0),
+    ]),
+    ("YC1  —  Yatay Çelik 1  (12 adet)", 12, [
+        ("P7",  1, "L60×5  Köşebent",    "S235JR", 1931,  15.6,  15.6),
+    ]),
+    ("YC2  —  Yatay Çelik 2  (12 adet)", 12, [
+        ("P8",  1, "L60×5  Köşebent",    "S235JR", 1954,  19.2,  19.2),
+    ]),
 ]
 
-row = 2
-for grp_name, items, op in sub_groups:
-    SUB(ws8, row, 1, 8, grp_name); row += 1
-    HDR(ws8, row, list(range(1,9)),
-        ["POZ","ADET\n(1 grp)","AÇIKLAMA","MALZEME","BOY\n(mm)","BİRİM\nAĞIRLIK(kg)","TOPLAM AĞIRLIK\n(tüm grp) kg","İŞLEM"], h=35)
-    row += 1
-    grp_total = 0
-    for i, (p,a,ac,m,b,birim,tot) in enumerate(items):
-        DATA(ws8, row, list(range(1,9)), [p,a,ac,m,b,birim,round(tot,1),op], alt=(i%2==1))
-        grp_total += tot; row += 1
-    TOT(ws8, row, 1, 7, f"ALT TOPLAM:", round(grp_total,1))
-    C(ws8, row, 8, "", H1, fw, CA, TB); row += 2
+row8 = 2
+for grp_name, mult, items in catim_grp:
+    SUB(ws8, row8, 1, 9, grp_name); row8 += 1
+    HDR(ws8, row8, list(range(1,10)),
+        ["POZ","ADET\n(1 asm)","PROFİL / AÇIKLAMA","MALZEME",
+         "BOY\n(mm)","BİRİM\nKg","1 ASM\nTOPLAM kg",f"×{mult}\nTOPLAM kg","İŞLEM"], h=35)
+    row8 += 1
+    asm_tot = 0
+    for i,(p,a,ac,m,b,birim,asm1) in enumerate(items):
+        all_tot = round(asm1 * mult, 1)
+        DATA(ws8, row8, list(range(1,10)),
+             [p, a, ac, m, b, birim, round(asm1,1), all_tot, "Kesim+Kaynak"], alt=(i%2==1))
+        asm_tot += asm1; row8 += 1
+    tot_all = round(asm_tot * mult, 1)
+    TOT(ws8, row8, 1, 8, f"ALT TOPLAM  (×{mult}):", tot_all)
+    C(ws8, row8, 9, "", H1, fw, CA, TB); row8 += 2
 
-# Ek elemanlar
-SUB(ws8, row, 1, 8, "DİĞER YAPISAL ELEMANLAR  (Toplam plan miktarları)"); row += 1
-HDR(ws8, row, list(range(1,9)),
-    ["POZ","ADET\n(TOPLAM)","AÇIKLAMA","MALZEME","BOY\n(mm)","BİRİM\nAĞIRLIK(kg)","TOPLAM\nAĞIRLIK(kg)","İŞLEM"], h=35)
-row += 1
-extra = [
-    ("P3",24,"PL10×300  PLAKA","S235JR",300,0.3,7.1,"Kesim+Kaynak"),
-    ("P4",1,"PL15×750  PLAKA","S235JR",750,51.6,51.6,"Kesim+Kaynak"),
-    ("P5",24,"UNP200","S235JR",1227,31.0,744.0,"Kesim+Kaynak"),
-    ("P6",24,"UNP200","S235JR",677,17.1,410.4,"Kesim+Kaynak"),
-    ("P7",12,"L80×8  KÖŞEBENTİ","S235JR",1931,18.6,223.2,"Kesim+Kaynak"),
-    ("P8",12,"L80×8  KÖŞEBENTİ","S235JR",1984,19.2,230.4,"Kesim+Kaynak"),
-    ("P11",1,"PL10×200  PLAKA","S235JR",5341,84.2,84.2,"Kesim+Kaynak"),
-    ("P12",1,"PL25×750  PLAKA","S235JR",750,86.0,86.0,"Kesim+Kaynak"),
-    ("P13",24,"PL10×200  PLAKA","S235JR",250,0.4,9.6,"Kesim"),
-    ("P14",24,"PL10×200  PLAKA","S235JR",100,0.2,4.8,"Kesim"),
-    ("P15",24,"PL10×248  PLAKA","S235JR",299,0.6,14.4,"Kesim"),
-    ("P16",24,"PL10×150  PLAKA","S235JR",250,0.4,9.6,"Kesim"),
-    ("P17",4,"PL10×513  PLAKA","S235JR",675,5.2,20.8,"Kesim+Kaynak"),
-    ("P18",1,"PL20×600  PLAKA","S235JR",600,43.9,43.9,"Kesim+Kaynak"),
-    ("P19",1,"PL15×100  PLAKA","S235JR",1916,23.0,23.0,"Kesim"),
-]
-for i, rd in enumerate(extra):
-    DATA(ws8, row, list(range(1,9)), rd, alt=(i%2==1)); row += 1
-sw(ws8,[8,12,30,14,10,14,16,22])
+NOTE(ws8, row8, 1, 9,
+     "NOT: Çizimden alınan TOPLAM AĞIRLIK = 5454.0 Kg  (1 komple çatı iskeleti için verilmiştir).")
+sw(ws8,[8,10,30,12,10,12,14,16,18])
 
 # ═══════════════════════════════════════════════════════════════════
 # SAYFA 9 – TOPLAM AĞIRLIK ÖZETİ
@@ -510,7 +581,7 @@ ozet = [
     ("TABAN","Taban Plakaları  (10mm + 12mm annüler)",11176.7,1,11176.7,"KEY199MECEQP2003"),
     ("TABAN","Drenaj Çukuru",76.1,1,76.1,"KEY199MECEQP2003"),
     ("TAVAN","Konik Tavan Sacları  (8mm)",8147.0,1,8147.0,"KEY199MECEQP2002"),
-    ("TAVAN İSK.","Konik Çatı Yapısal (CK1+CK2+KL1+diğer)","~5500","1","~5500","KEY199MECEQP2004"),
+    ("TAVAN İSK.","Konik Çatı Yapısal (CK1-CK4+KL1+W1+W2+YC1+YC2)",5454.0,1,5454.0,"KEY199MECEQP2004"),
     ("NOZUL N1","12\" Petrol Giriş Nozulu",68.5,1,68.5,"MKD-205"),
     ("NOZUL N4","12\" Petrol Çıkış Nozulu (BOTTOM)",64.5,1,64.5,"MKD-205"),
     ("NOZUL N7A/B","6\" Drain Nozulu",62.0,2,124.0,"MKD-205"),
@@ -523,7 +594,8 @@ ozet = [
     ("MANHOL M2","24\" Tavan Manholu",132.5,1,132.5,"MKD-204"),
     ("MANHOL M3","24\" Temizleme Manholu",367.0,1,367.0,"MKD-211"),
     ("ANKRAJ","Ankraj (16 komple × 13.5 Kg)",13.5,16,216.0,"KEY199MECEQP2001"),
-    ("MERDİVEN","Merdiven + Korkuluk","Bekleniyor","1","Bekleniyor","MKD-210"),
+    ("MERDİVEN","Merdiven + Korkuluk  (1 Komple)",1777.0,1,1777.0,"MKD-210"),
+    ("İSİM PLAK.","Tank İsim Plakası (TI-1 ~ TI-4)",5.18,1,5.18,"–"),
     ("SAMANDIRA","Mekanik Samandıra (N14)","Bekleniyor","1","Bekleniyor","MKD-206"),
 ]
 
