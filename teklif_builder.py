@@ -77,9 +77,9 @@ def tot_row(ws, r, c1, cv, label, kg_val, fill=H1):
 ws = wb["TEKLIF"]
 
 # Mevcut içeriği temizle ve sıfırdan yaz
-ws.delete_rows(1, ws.max_row)
 for mc in list(ws.merged_cells.ranges):
     ws.unmerge_cells(str(mc))
+ws.delete_rows(1, ws.max_row)
 
 # Sütun genişlikleri:
 # A(boşluk) | B(No) | C(Tanım+İşlem) | D(Adet) | E(Boyut mm) | F(Net kg/adet) | G(Toplam kg) | H(Mat.Fiyat★) | I(İşçilik★) | J(Mat.Tutar) | K(İşç.Tutar) | L(TOPLAM $)
@@ -167,8 +167,9 @@ t202_govde = [
                                  "NOT: Her plakada farklı nozul/manhole kesimi var → Çizim KEY199MECEQP2001"),
     (1,  "1480×8×3997",  371.5, "GÖVDE 8mm — 1. Kurs Kapama (POZ 2) — Kesim + Silindirik Bükme R=6365mm"),
     # 6mm kurslar 2-6:
-    (30, "1480×6×6000",  418.2, "GÖVDE 6mm — 2–6. Kurs (POZ 3 ×30) — Kesim + Silindirik Bükme R=6365mm"),
+    (29, "1480×6×6000",  418.2, "GÖVDE 6mm — 2–6. Kurs (POZ 3 ×29) — Kesim + Silindirik Bükme R=6365mm"),
     (1,  "1480×6×6000",  418.0, "GÖVDE 6mm — 2–6. Kurs Kapama (POZ 3A) — Kesim + Silindirik Bükme R=6365mm"),
+    (1,  "1480×6×6000",  418.0, "GÖVDE 6mm — 2–6. Kurs Kapama (POZ 3B) — Kesim + Silindirik Bükme R=6365mm"),
 ]
 for i,(adet,boyut,kg,islem) in enumerate(t202_govde):
     data_row(ws,r,no_counter,f"[T-202]  {islem}",adet,boyut,kg,alt=(i%2==1))
@@ -265,9 +266,9 @@ ws.freeze_panes = "C4"
 # ÜRETİM SAYFASI — T-202 Shell detay (fabrikatör için)
 # ═══════════════════════════════════════════════════════════════════════
 wsu = wb["ÜRETİM"]
-wsu.delete_rows(1, wsu.max_row)
 for mc in list(wsu.merged_cells.ranges):
     wsu.unmerge_cells(str(mc))
+wsu.delete_rows(1, wsu.max_row)
 
 sw(wsu, [3, 8, 8, 44, 14, 14, 14, 12, 26], start=1)
 
@@ -285,8 +286,9 @@ govde_detail = [
     ("1D",  1, "⊏ 1480×8 × 6000",  "S275J2", 414.0,   414.0,  8, "Kesim + Silindirik Bükme R=6365mm  |  Manhole M1 (Ø1255) kesim var"),
     ("1E",  1, "⊏ 1480×8 × 6000",  "S275J2", 557.6,   557.6,  8, "Kesim + Silindirik Bükme R=6365mm"),
     ("2",   1, "⊏ 1480×8 × 3997",  "S275J2", 371.5,   371.5,  8, "Kesim + Silindirik Bükme R=6365mm  (Kapama plakası)"),
-    ("3",  30, "⊏ 1480×6 × 6000",  "S275J2", 418.2, 12546.0,  6, "Kesim + Silindirik Bükme R=6365mm"),
+    ("3",  29, "⊏ 1480×6 × 6000",  "S275J2", 418.2, 12127.8,  6, "Kesim + Silindirik Bükme R=6365mm"),
     ("3A",  1, "⊏ 1480×6 × 6000",  "S275J2", 418.0,   418.0,  6, "Kesim + Silindirik Bükme R=6365mm  (Kapama plakası)"),
+    ("3B",  1, "⊏ 1480×6 × 6000",  "S275J2", 418.0,   418.0,  6, "Kesim + Silindirik Bükme R=6365mm  (Kapama plakası)"),
 ]
 for i,(poz,adet,acik,malz,birim,toplam,thk,islem) in enumerate(govde_detail,start=3):
     fill_=ALT if i%2==0 else WH
@@ -312,7 +314,7 @@ for c,t in enumerate(["KURS","KALINLIK","YÜKSEKLİK","PLAKA ADET","AÇIKLAMA","
 tr+=1
 kurs=[
     ("1. Kurs (Alt)","8 mm",1480,"7 adet (POZ 1,1A,1B,1C,1D,1E,2)","Nozul/Manhole kesimli","S275J2",3549.1),
-    ("2–6. Kurslar","6 mm",1480,"31 adet (POZ 3×30 + POZ 3A×1)","Standart silindirik","S275J2",12964.0),
+    ("2–6. Kurslar","6 mm",1480,"31 adet (POZ 3×29 + POZ 3A×1 + POZ 3B×1)","Standart silindirik","S275J2",12963.8),
 ]
 for i,kd in enumerate(kurs):
     fill_=ALT if i%2==0 else WH
@@ -326,9 +328,9 @@ wsu.sheet_view.showGridLines = False
 # ═══════════════════════════════════════════════════════════════════════
 for sh_name, tank_name in [("TAŞIRMA","T-201 TAŞIRMA TANKI"), ("ATIKSU","T-301 ATIK SU TANKI")]:
     wsx = wb[sh_name]
-    wsx.delete_rows(1, wsx.max_row)
     for mc in list(wsx.merged_cells.ranges):
         wsx.unmerge_cells(str(mc))
+    wsx.delete_rows(1, wsx.max_row)
     sw(wsx,[3,8,8,44,14,14,14,12,26],start=1)
     title_row(wsx,1,2,9,f"{tank_name}  —  GÖVDE PLAKA DETAYI  (Çizimler Bekleniyor)",h=22)
     for c,t in enumerate(["POZ","ADET","AÇIKLAMA","MALZEME","BİRİM Kg","TOPLAM Kg","KALINLIK (mm)","İŞLEM TÜRÜ"],2):

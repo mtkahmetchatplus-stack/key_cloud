@@ -162,14 +162,15 @@ govde = [
     ("1D",  1, "⊏ 1480×8 ......... 6000",  "S275J2", 414.0,   414.0,  8, "Kesim + Silindirik Bükme"),
     ("1E",  1, "⊏ 1480×8 ......... 6000",  "S275J2", 557.6,   557.6,  8, "Kesim + Silindirik Bükme"),
     ("2",   1, "⊏ 1480×8 ......... 3997",  "S275J2", 371.5,   371.5,  8, "Kesim + Silindirik Bükme"),
-    ("3",   30,"⊏ 1480×6 ......... 6000",  "S275J2", 418.2, 12546.0,  6, "Kesim + Silindirik Bükme"),
+    ("3",   29,"⊏ 1480×6 ......... 6000",  "S275J2", 418.2, 12127.8,  6, "Kesim + Silindirik Bükme"),
     ("3A",  1, "⊏ 1480×6 ......... 6000",  "S275J2", 418.0,   418.0,  6, "Kesim + Silindirik Bükme"),
+    ("3B",  1, "⊏ 1480×6 ......... 6000",  "S275J2", 418.0,   418.0,  6, "Kesim + Silindirik Bükme"),
 ]
 for i, row in enumerate(govde, start=3):
     DATA(ws3, i, list(range(1,9)), row, alt=(i%2==0))
-TOT(ws3, 12, 1, 6, "TOPLAM AĞIRLIK:", 16513.0)
-for c in [7,8]: C(ws3, 12, c, "", H1, fw, CA, TB)
-ws3.row_dimensions[12].height = 18
+TOT(ws3, 13, 1, 6, "TOPLAM AĞIRLIK:", 16513.0)
+for c in [7,8]: C(ws3, 13, c, "", H1, fw, CA, TB)
+ws3.row_dimensions[13].height = 18
 
 # Kurs özeti
 r=14
@@ -180,8 +181,8 @@ ws3.row_dimensions[r].height=30; r+=1
 kurs_data=[
     ("1. Kurs (Alt)","8 mm",1480,"7 adet (POZ 1,1A,1B,1C,1D,1E,2)","Nozul kesimleri mevcut","S275J2",
      557.6+557.0+552.3+539.1+414.0+557.6+371.5),
-    ("2-6. Kurslar","6 mm",1480,"31 adet (POZ 3×30 + POZ 3A×1)","Standart plakalar","S275J2",
-     12546.0+418.0),
+    ("2-6. Kurslar","6 mm",1480,"31 adet (POZ 3×29 + POZ 3A×1 + POZ 3B×1)","Standart plakalar","S275J2",
+     12127.8+418.0+418.0),
 ]
 for i, kd in enumerate(kurs_data, start=r):
     for c, v in enumerate(kd, 1):
@@ -190,7 +191,7 @@ for i, kd in enumerate(kurs_data, start=r):
         cl.fill=fill; cl.font=fn; cl.alignment=CA; cl.border=TB
 r += len(kurs_data)
 
-NOTE(ws3,r,1,8,"NOT: Kurs yüksekliği 1480mm, toplam gövde yüksekliği ≈ 6 × 1480mm = 8880mm ≈ 8.920m. POZ 3 = 30 adet standart silindirik plaka (8mm'lik kursun nozulsuz plakaları 8mm'dir).")
+NOTE(ws3,r,1,8,"NOT: Kurs yüksekliği 1480mm, toplam gövde yüksekliği ≈ 6 × 1480mm = 8880mm ≈ 8.920m. POZ 3 = 29 adet standart, POZ 3A ve 3B = kapama plakaları (toplam 31 adet 6mm). Çizimdeki '12546' toplam değeri drawing hatasıdır; doğrusu 12127.8 kg (29×418.2).")
 sw(ws3,[8,8,40,14,14,14,12,24])
 
 # ═══════════════════════════════════════════════════════════════════
@@ -213,10 +214,10 @@ taban = [
     ("8",   2, "⊏ 632×10 .......... 5207.5","S275J2",  174.1,  348.2, 10, "Kesim + Düz Hadde"),
     ("9",   6, "⊏ 800×12 .......... 5937",  "S275J2",  436.1, 2616.6, 12, "Kesim + Düz Hadde (Anüler)"),
     ("9A",  1, "⊏ 800×12 .......... 3327",  "S275J2",  237.8,  237.8, 12, "Kesim + Düz Hadde (Anüler)"),
-    ("10",  8, "⊏ 50×5 ............. 720",  "S275J2",    1.42,  11.4,  5, "Kesim (Drenaj strip)"),
-    ("11",  1, "⊏ 50×5 ............. 1301.5","S275J2",   2.55,   2.55, 5, "Kesim (Drenaj strip)"),
-    ("12", 13, "⊏ 50×5 ............. 1400", "S275J2",    2.8,   36.4,  5, "Kesim (Drenaj strip)"),
-    ("13",  1, "⊏ 50×5 ............. 2641.5","S275J2",   5.18,   5.18, 5, "Kesim (Drenaj strip)"),
+    ("10",  8, "⊏ 50×5 ............. 720",    "S275J2",  1.42,  11.4,  5, "Kesim (Drenaj strip)"),
+    ("11",  1, "⊏ 50×5 ............. 1301.5","S275J2",  2.55,   2.55, 5, "Kesim (Drenaj strip)"),
+    ("12", 13, "⊏ 50×5 ............. 1400",  "S275J2",  2.80,  36.4,  5, "Kesim (Drenaj strip)"),
+    ("13",  1, "⊏ 50×5 ............. 2641.5","S275J2",  5.18,   5.18, 5, "Kesim (Drenaj strip)"),
 ]
 for i, row in enumerate(taban, start=3):
     DATA(ws4, i, list(range(1,9)), row, alt=(i%2==0))
