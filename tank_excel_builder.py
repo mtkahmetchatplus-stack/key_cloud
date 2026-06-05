@@ -489,6 +489,43 @@ for i, it in enumerate(merd_items):
 TOT(ws7, row, 1, 6, "TOPLAM AĞIRLIK: 1777.0 Kg", 1777.0)
 C(ws7, row, 7, "", H1, fw, CA, TB); row += 2
 
+# Mekanik Samandıra (N14) Malzeme Listesi
+saman_items = [
+    (1,  1, "ø21 BORU ......... 26",             "A 283 Gr.C","–","–",""),
+    (2,  2, "ø27 BORU ......... 130",             "S.S. A316L","–","–",""),
+    (3,  2, "ø400×6 PLAKA",                       "S.S. A316L","–","–",""),
+    (4,  1, "⊏ 300×6×1257 PLAKA",                "S.S. A316L","–","–",""),
+    (5,  2, "⊏ 100×6×100 PLAKA",                 "S.S. A316L","–","–",""),
+    (6, "–","⊏ 30×5×80 PLAKA",                   "A 283 Gr.C","–","–",""),
+    (7, "–","⊏ 50×10×298 PLAKA",                 "A 283 Gr.C","–","–",""),
+    (8, "–","⊏ 50×10×292 PLAKA",                 "A 283 Gr.C","–","–",""),
+    (9, "–","⊏ 50×5×268 PLAKA",                  "A 283 Gr.C","–","–",""),
+    (10, 1, "⊏ 200×2×9000 PLAKA  (Seviye Göstergesi)","A 283 Gr.C","–","–",""),
+    (11,"–","⊏ 50×2×200 PLAKA",                  "A 283 Gr.C","–","–",""),
+    (12, 3, "L 60×60×6×9514 PROFİL",             "A 283 Gr.C","–","–",""),
+    (13, 1, "[ 140×7×625 PROFİL",                "A 283 Gr.C","–","–",""),
+    (14, 2, "ø50 MAKARA",                         "A 283 Gr.C","–","–",""),
+    (15, 4, "⊏ 30×5×60 PLAKA",                   "A 283 Gr.C","–","–",""),
+    (16, 1, "⊏ 150×15×300 PLAKA",               "A 283 Gr.C","–","–",""),
+    (17, 8, "⊏ 30×3×60 PLAKA",                   "A 283 Gr.C","–","–",""),
+    (18,"–","ø5×20 mm KONİK VİDA / PUL",         "A 283 Gr.C","–","–",""),
+    (19, 2, "M8 SAPLAMA-SOMUN",                   "A 283 Gr.C","–","–",""),
+    (20, 2, "M18 SAPLAMA-SOMUN",                  "A 283 Gr.C","–","–",""),
+    (21, 1, "ø8 ÇELİK HALAT",                    "–","–","–",""),
+    (22, 2, "ø12 ÇELİK HALAT",                   "–","–","–",""),
+    (23, 4, "ø12 DEMİR",                          "S.S. A316L","–","–",""),
+    (24, 8, "HALAT KLEMENSİ",                     "S.S. A316L","–","–",""),
+    (25,"–","L 60×60×6×195 PROFİL",              "A 283 Gr.C","–","–",""),
+]
+SUB(ws7, row, 1, 7, "MEKANİK SAMANDIRA (N14)  —  1 Adet  (A283 Gr.C + S.S. A316L)"); row += 1
+HDR(ws7, row, list(range(1,8)),
+    ["POZ","ADET","AÇIKLAMA","MALZEME","BİRİM\nAĞIRLIK(kg)","TOPLAM\nAĞIRLIK(kg)","NOT"], h=30)
+row += 1
+for i, it in enumerate(saman_items):
+    DATA(ws7, row, list(range(1,8)), it, alt=(i%2==1)); row += 1
+NOTE(ws7, row, 1, 7, "NOT: Malzeme listesi 1 adet samandıra için verilmiştir. Ağırlık değerleri çizimde belirtilmemiştir.")
+row += 2
+
 sw(ws7,[8,8,44,20,14,14,22])
 
 # ═══════════════════════════════════════════════════════════════════
@@ -566,6 +603,32 @@ for grp_name, mult, items in catim_grp:
 
 NOTE(ws8, row8, 1, 9,
      "NOT: Çizimden alınan TOPLAM AĞIRLIK = 5454.0 Kg  (1 komple çatı iskeleti için verilmiştir).")
+row8 += 2
+
+# Çatım Civata-Somun-Rondela Listesi
+SUB(ws8, row8, 1, 9, "ÇATIM CİVATA-SOMUN-RONDELA LİSTESİ  (Standart: DIN 7990 / 7989 / 4032)"); row8 += 1
+HDR(ws8, row8, [1,2,3,4,5,6],
+    ["CİVATA TANIMI","ÇATIM-1","ÇATIM-2","MALZEME\nSINIFI","ADET","STANDART"], h=25)
+row8 += 1
+bolt_list = [
+    ("BOLT 16×45", "CK3", "CK1", "8.8", 48, "7990/7989/4032"),
+    ("BOLT 16×45", "CK3", "CK2", "8.8", 48, "7990/7989/4032"),
+    ("BOLT 16×45", "CK4", "CK1", "8.8", 48, "7990/7989/4032"),
+    ("BOLT 16×45", "CK4", "CK2", "8.8", 48, "7990/7989/4032"),
+    ("BOLT 20×50", "YC1", "CK1", "8.8", 24, "7990/7989/4032"),
+    ("BOLT 20×50", "YC1", "CK2", "8.8", 24, "7990/7989/4032"),
+    ("BOLT 20×50", "YC2", "CK1", "8.8", 24, "7990/7989/4032"),
+    ("BOLT 20×50", "YC2", "CK2", "8.8", 24, "7990/7989/4032"),
+]
+for i, rd in enumerate(bolt_list):
+    fill = ALT if i%2==1 else WH
+    for c, v in enumerate(rd, 1):
+        C(ws8, row8, c, v, fill, fn, CA, TB)
+    row8 += 1
+# Totals
+b16_tot = 4*48; b20_tot = 4*24
+SUB(ws8, row8, 1, 9, f"TOPLAM: BOLT 16×45 → {b16_tot} adet  |  BOLT 20×50 → {b20_tot} adet  (her civata için 1 somun + 2 rondela)"); row8 += 1
+
 sw(ws8,[8,10,30,12,10,12,14,16,18])
 
 # ═══════════════════════════════════════════════════════════════════
@@ -639,12 +702,12 @@ cost_items = [
     ("TABAN","Taban Plakaları (Orta)","S275J2","10",11176.7+76.1),
     ("TABAN","Annüler Plakalar (Kenar)","S275J2","12","dahil"),
     ("TAVAN","Konik Tavan Sacları","S275J2","8",8147.0),
-    ("TAVAN İSK.","Çatı İskeleti (UNP+PL+PIP)","S235JR","–","~5500"),
+    ("TAVAN İSK.","Çatı İskeleti (UNP+PL+PIP)","S235JR","–",5454.0),
     ("NOZULLAR","Tüm Nozullar (N1+N4+N7A/B+N8+N9+N18+N19+N21)","A106/A105","–",
      round(68.5+64.5+62.0*2+31.9+2.65+1.7+62+61.1*4,1)),
     ("MANHOLLER","M1+M2+M3 Manhol","S275J2","–",180+132.5+367),
     ("ANKRAJ","Ankraj (16 Komple)","AISI C1030","–",216.0),
-    ("DİĞER","Merdiven+Samandıra+Aksesuar","S235JR","–","~500"),
+    ("MERDİVEN","Merdiven + Korkuluk","S235JR","–",1777.0),
 ]
 
 for i, (bolum,acik,malz,thk,ag) in enumerate(cost_items, start=4):
@@ -668,9 +731,9 @@ HDR(ws10, r, list(range(1,8)),
     ["İŞLEM TÜRÜ","AÇIKLAMA","MİKTAR","BİRİM","BİRİM FİYAT ★","TUTAR ($)","NOT"], h=30)
 r+=1
 imalat_iscilik=[
-    ("Silindirik Bükme","Gövde Sacları 6mm",f"{round(16513/47.1,0):.0f} adet plaka","adet","","","1480×6000mm plakalar"),
-    ("Silindirik Bükme","Gövde Sacları 8mm","7 adet plaka","adet","","","1480×6000mm + kısmi"),
-    ("Konik Bükme","Tavan Sacları 8mm","~27 adet sektör","adet","","","Konik şekil, özel kalıp"),
+    ("Silindirik Bükme","Gövde Sacları 6mm","31 adet plaka","adet","","","POZ 3×30 + POZ 3A×1  |  1480×6000mm"),
+    ("Silindirik Bükme","Gövde Sacları 8mm","7 adet plaka","adet","","","POZ 1-1E×6 (6000mm) + POZ 2×1 (3997mm)"),
+    ("Konik Bükme","Tavan Sacları 8mm","35 adet sektör","adet","","","POZ 1-9 toplam 35 parça, 1500×6000mm stokundan"),
     ("Kesim (Plazma/Lazer)","Tüm Plakalar","~37 ton","ton","","","Gövde+Taban+Tavan"),
     ("Profil Kesim","UNP240/UNP200/L80","~3000 kg","ton","","","Çatı iskeleti"),
     ("Boru Kesim","PIP 323.9×8 + Nozul boruları","~700 kg","ton","","",""),
@@ -732,6 +795,134 @@ cl.fill=YEL; cl.font=Font(bold=True,size=11,color="FF0000")
 cl.alignment=CA; cl.border=TB
 
 sw(ws10,[16,36,16,16,14,14,28,14,14,14])
+
+# ═══════════════════════════════════════════════════════════════════
+# SAYFA 11 – SATINALMA METRAJ ÖZETİ
+# ═══════════════════════════════════════════════════════════════════
+ws11 = wb.create_sheet("Satınalma Metrajı"); ws11.sheet_view.showGridLines = False
+TITLE(ws11, 1, 1, 8, "7000 Bbl ÜRETİM TANKI  —  NET SATINALMA METRAJ ÖZETİ  (1 TANK)")
+
+# ── A. SAC / PLAKA ─────────────────────────────────────────────────
+SUB(ws11, 2, 1, 8, "A. SAC PLAKA — Kalınlık ve Malzeme Sınıfına Göre")
+HDR(ws11, 3, list(range(1,9)),
+    ["#","MALZEME","KALINLIK\n(mm)","KULLANIM YERİ","PARÇA\nADETİ","NET\nAĞIRLIK (kg)",
+     "STANDART STOK ÖNERİSİ","NOTLAR"], h=35)
+
+# Gövde
+govde_8mm_wt  = 557.6+557.0+552.3+539.1+414.0+557.6+371.5   # 3549.1
+govde_6mm_wt  = 30*418.2 + 418.0                             # 12964.0
+# Tavan
+tavan_8mm_wt  = 8147.0
+tavan_8mm_cnt = 4+1+1+1+2+4+4+2+1+1+3+1+4+4+2              # 35
+# Taban orta (10mm)
+taban_10mm_wt = 4937.1+628.0+222.0+657.6+222.0+557.0+694.8+348.2  # 8266.7
+taban_10mm_cnt= 7+2+4+3+1+1+2+2                                    # 22
+# Taban annüler (12mm)
+taban_12mm_wt = 2616.6+237.8                                 # 2854.4
+taban_12mm_cnt= 6+1                                          # 7
+# Taban drenaj stripleri (5mm)
+taban_5mm_wt  = 11.4+2.55+36.4+5.18                         # 55.5
+taban_5mm_cnt = 8+1+13+1                                     # 23
+
+sac_rows = [
+    (1,"S275J2", 6,"Gövde Silindirik Kurslar (POZ 3, 3A)",31,
+     govde_6mm_wt,"32× 1500×6000×6mm (%2 fire)",
+     "1480mm enine kesilecek; 30 adet tam + 1 adet kısmi"),
+    (2,"S275J2", 8,"Gövde Alt Kurs (POZ 1,1A,1B,1C,1D,1E,2)",7,
+     govde_8mm_wt,"7× 1500×6000×8mm",
+     "6 adet 6000mm tam, 1 adet 3997mm kısmi"),
+    (3,"S275J2", 8,"Tavan Konik Sektör Plakaları (POZ 1-9)",tavan_8mm_cnt,
+     tavan_8mm_wt,f"40× 1500×6000×8mm (%15 fire)",
+     "Sektör şekil; 8mm+6mm gövde ile birleşik sipariş önerilir"),
+    ("→","S275J2","8mm TOPLAM","Gövde (7 pk) + Tavan (35 pk) birleşik",42,
+     round(govde_8mm_wt+tavan_8mm_wt,1),"~47 plaka 1500×6000×8mm","★ Sipariş miktarı"),
+    (4,"S275J2",10,"Taban Orta Plakalar (POZ 1-8)",taban_10mm_cnt,
+     round(taban_10mm_wt,1),"12× 1500×6000×10mm",
+     "Büyük plakalardan nested kesim — fire düşük"),
+    (5,"S275J2",12,"Taban Annüler (Çevre) Plakalar (POZ 9, 9A)",taban_12mm_cnt,
+     round(taban_12mm_wt,1),"4× 1500×6000×12mm",
+     "800mm en; 1500mm'lik plakadan boyuna bölünecek"),
+    (6,"S275J2", 5,"Taban Drenaj Strip Parçaları (POZ 10-13)",taban_5mm_cnt,
+     round(taban_5mm_wt,1),"50mm × çeşitli boy şerit",
+     "Atık sacdan kesilebilir"),
+    (None,"S275J2","—","S275J2 TOPLAM SAC AĞIRLIĞI","—",
+     round(govde_6mm_wt+govde_8mm_wt+tavan_8mm_wt+taban_10mm_wt+taban_12mm_wt+taban_5mm_wt,1),
+     "—","★ Ana sac siparişi toplam"),
+]
+
+rr = 4
+for rd in sac_rows:
+    is_tot = rd[0] in ["→", None]
+    fill_ = H2 if is_tot else (ALT if rr%2==0 else WH)
+    fnt_  = fw if is_tot else fn
+    for c,v in enumerate(rd,1):
+        C(ws11, rr, c, v, fill_, fnt_, CA if c!=4 else LA, TB)
+    rr += 1
+
+# ── B. YAPISAL PROFİL / BORU ───────────────────────────────────────
+rr += 1
+SUB(ws11, rr, 1, 8, "B. YAPISAL PROFİL VE BORU"); rr += 1
+HDR(ws11, rr, list(range(1,8)),
+    ["#","PROFİL / BORU","MALZEME","KULLANIM YERİ","TOPLAM ADET","TOPLAM BOY (mm)","TOPLAM AĞIRLIK (kg)"], h=30)
+rr += 1
+profil_rows = [
+    (1,"UNP240","S235JR","Çatı CK1+CK2 Rafterlar",24,24*5685,"~3732"),
+    (2,"UNP200","S235JR","Çatı CK3 Purlin",24,24*1227,"~744"),
+    (3,"UNP200","S235JR","Çatı CK4 Purlin",24,24*677,"~410"),
+    (4,"PIP 323.9×8 Boru","S235JR","Çatı KL1 Merkezi Kolon",1,9369,580.2),
+    (5,"L60×5 Köşebent","S235JR","Çatı YC1+YC2",24,"~46740","~417"),
+    (6,"⊏ 8×200 (C200×8)","S235JR","Merdiven Borda",8,"çeşitli","~388"),
+    (7,"NPU100","S235JR","Merdiven Basamak",13,"çeşitli","~288"),
+    (8,"L60×6 Köşebent","S235JR","Merdiven Korkuluk/Detay","~100+","çeşitli","~560"),
+    (9,'1 1/4" SCH Boru (Handrail)',"S235JR","Merdiven Korkuluk",1,70000,178.5),
+]
+for i,rd in enumerate(profil_rows):
+    DATA(ws11, rr, list(range(1,8)), rd, alt=(i%2==1)); rr += 1
+
+# ── C. NOZUL BORULARI VE FLANŞLARI ─────────────────────────────────
+rr += 1
+SUB(ws11, rr, 1, 8, "C. NOZUL BORULARI VE FLANŞLARI  (ASTM)"); rr += 1
+HDR(ws11, rr, list(range(1,8)),
+    ["#","MALZEME / TİP","STANDART","KULLANIM YERİ","ADET","AĞIRLIK (kg)","NOTLAR"], h=30)
+rr += 1
+noz_mat = [
+    (1,'12" SCH XS Boru',"ASTM A106 Gr.B","N1+N4+N21","6 adet","~129","2×N1,2×N4 + N21×4"),
+    (2,' 8" SCH XS Boru',"ASTM A106 Gr.B","N8","1 adet","11.4",""),
+    (3,' 6" SCH XS Boru+Dirsek',"ASTM A106+A234WPB","N7A/B","2 komple set","~107.2","Dirsek dahil"),
+    (4,' 1" / 1.5" Boru',"ASTM A106 Gr.B","N9+N18","2 adet","~8",""),
+    (5,'12" 150# SO-RF Flanş',"ASTM A105","N1+N4+N21","6 adet","~174",""),
+    (6,' 8" 150# SO-RF Flanş',"ASTM A105","N8","1 adet",13.5,""),
+    (7,' 6" 150# SO-RF Flanş',"ASTM A105","N7A/B","2 adet",11.8,""),
+    (8,' 1" / 1.5" Flanş',"ASTM A105","N9+N18","2 adet","~5",""),
+]
+for i,rd in enumerate(noz_mat):
+    DATA(ws11, rr, list(range(1,8)), rd, alt=(i%2==1)); rr += 1
+
+# ── D. SAC/PLAKA TOPLAM ÖZET (Satınalma için) ──────────────────────
+rr += 2
+SUB(ws11, rr, 1, 8, "D. KONSOLİDE AĞIRLIK — Çelik Sınıfına Göre Satınalma Özeti"); rr += 1
+HDR(ws11, rr, [1,2,3,4,5],
+    ["ÇELİK SINIFI","KULLANIM","NET AĞIRLIK (kg)","FİRE PAYI (%3)","SATINALMA (kg)"], h=30)
+rr += 1
+tot_s275j2 = round(govde_6mm_wt+govde_8mm_wt+tavan_8mm_wt+taban_10mm_wt+taban_12mm_wt+taban_5mm_wt,1)
+konsolidat = [
+    ("S275J2","Ana Yapı Sacları (Gövde+Taban+Tavan)",tot_s275j2,
+     round(tot_s275j2*0.03,1),round(tot_s275j2*1.03,1)),
+    ("S235JR","Yapısal (Çatı+Merdiven profil+plakalar)","~7230",
+     "~220","~7450"),
+    ("ASTM A106 Gr.B","Nozul Boruları","~255","–","~260"),
+    ("ASTM A105","Nozul Flanşları","~205","–","~210"),
+    ("A193 Gr.B7 / A194 Gr.2H","Cıvata-Somun-Rondela","–","–","Çizimden sipariş"),
+    ("A 283 Gr.C + S.S. A316L","Mekanik Samandıra","–","–","1 komple set"),
+    ("AISI C1030","Ankraj (16 adet)","216","-","220"),
+]
+for i,rd in enumerate(konsolidat):
+    fill_ = GRN if i==0 else (ALT if i%2==0 else WH)
+    for c,v in enumerate(rd,1):
+        C(ws11,rr,c,v,fill_,fn,CA if c!=2 else LA,TB)
+    rr += 1
+NOTE(ws11, rr, 1, 8, "★ S275J2 sac siparişi: 6mm (~12964 kg) + 8mm (~11696 kg) + 10mm (~8267 kg) + 12mm (~2854 kg). Net toplam ~35781 kg. %3 fire ile ~36855 kg sipariş önerilir.")
+sw(ws11,[6,18,14,40,12,16,22,24])
 
 out = "/home/user/key_cloud/7000Bbl_Tank_Malzeme_ve_Maliyet.xlsx"
 wb.save(out)
