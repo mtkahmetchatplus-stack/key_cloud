@@ -863,38 +863,53 @@ SUB(ws11, rr, 1, 8, "B — YAPISAL PROFİL / BORU  (S235JR  |  EN 10025-2)"); rr
 HDR11(ws11, rr); rr += 1
 bsec_start = rr
 
+# (No, Tanım [net ihtiyaç dahil], Malzeme, StokBoyut, SiparisBarAdet, NetKg)
+# Sipariş bar adedi hesabı her satırda açıklanmış (yorum satırı):
 profil_data = [
-    # (No, Tanım, Malzeme, StokBoyut, Adet, NetKg)
-    (1,  "UNP 240 — Çatı Rafteri CK1 + CK2  (24 adet × 5685 mm)",
-         "S235JR", "UNP240 × 12000", 12, 3732.0),
-    (2,  "UNP 200 — Çatı Purlin CK3  (24 adet × 1227 mm)",
-         "S235JR", "UNP200 × 6000",   5,  744.0),
-    (3,  "UNP 200 — Çatı Purlin CK4  (24 adet × 677 mm)",
-         "S235JR", "UNP200 × 6000",   2,  410.4),
-    (4,  "PIP 323.9×8 — Çatı Merkezi Kolon KL1  (1 adet × 9369 mm)",
-         "S235JR", "PIP323.9×8 × 12000", 1, 580.2),
-    (5,  "L 60×5 Köşebent — Çatı YC1+YC2  (24 adet, toplam ~46740 mm)",
-         "S235JR", "L60×5 × 6000",    8,  417.6),
-    (6,  "C 200×8 (UPE200) — Merdiven Borda Kirişi  (8 adet, çeşitli boy)",
-         "S235JR", "200×8 × 9000",    9,  415.7),
-    (7,  "NPU 100 — Merdiven Basamak  (13 adet × ~1080–1179 mm)",
-         "S235JR", "NPU100 × 6000",   3,  288.0),
-    (8,  "L 60×6 Köşebent — Merdiven Korkuluk ve Detaylar  (~100+ parça)",
-         "S235JR", "L60×6 × 6000",   20,  499.6),
-    (9,  '1¼" STD SCH Boru — Merdiven Korkuluk (Handrail)  (70000 mm)',
-         "S235JR", '1¼" SCH × 6000', 12,  178.5),
+    # 24 parça × 5685mm. 12000mm bar'dan 2 parça çıkar → 24/2 = 12 bar
+    (1, "UNP 240  —  Çatı Rafteri CK1+CK2\n"
+        "→ 24 parça × 5685 mm  |  12000mm bar'dan 2 parça  |  12 bar sipariş",
+        "S235JR", "UNP240 × 12000", 12, 3732.0),
+    # CK3: 24×1227mm + CK4: 24×677mm = 45696mm toplam. 6000mm bar'dan ort.6 parça → 8 bar
+    (2, "UNP 200  —  Çatı Purlin CK3 + CK4\n"
+        "→ CK3: 24×1227mm + CK4: 24×677mm = 45696mm  |  8 bar sipariş",
+        "S235JR", "UNP200 × 6000", 8, 1154.4),
+    # 1 parça × 9369mm → 1 bar 12000mm
+    (3, "PIP 323.9×8  —  Çatı Merkezi Kolon KL1\n"
+        "→ 1 parça × 9369 mm  |  1 bar 12000mm sipariş",
+        "S235JR", "PIP 323.9×8 × 12000", 1, 580.2),
+    # YC1: 12×1931mm + YC2: 12×1954mm = 46620mm. 6000mm bar'dan 3 parça → 8 bar
+    (4, "L 60×5  —  Çatı Yatay Çelik YC1+YC2\n"
+        "→ YC1: 12×1931mm + YC2: 12×1954mm = 46620mm  |  8 bar sipariş",
+        "S235JR", "L60×5 × 6000", 8, 417.6),
+    # 9 parça (maks.8057mm). Nesting: {8058+900},{7551+973},{6604+1070},{6190+1003+750} → 4 bar
+    (5, "C 200×8  —  Merdiven Borda Kirişi\n"
+        "→ 9 parça / 33096mm toplam  |  9000mm bar'a nesting: 4 bar sipariş",
+        "S235JR", "200×8 × 9000", 4, 415.7),
+    # 12×1080mm + 12×1178.5mm = 27102mm. 6000mm bar'dan 5 parça → 5 bar
+    (6, "NPU 100  —  Merdiven Basamak\n"
+        "→ 12×1080mm + 12×1179mm = 27102mm  |  5 bar sipariş",
+        "S235JR", "NPU100 × 6000", 5, 288.0),
+    # ~100+ parça çeşitli boy / ~87000mm toplam. 6000mm bar → 15 bar
+    (7, "L 60×6  —  Merdiven Korkuluk ve Bağlantı Detayları\n"
+        "→ ~100+ parça / ~87000mm toplam  |  15 bar sipariş",
+        "S235JR", "L60×6 × 6000", 15, 499.6),
+    # 1 parça 70000mm = 12 boy 6000mm
+    (8, '1¼" STD SCH Pipe  —  Merdiven Küpeşte (Handrail)\n'
+        '→ 1 bütün parça 70000mm  |  12 boy 6000mm sipariş',
+        "S235JR", '1¼" SCH × 6000', 12, 178.5),
 ]
 
 for nd in profil_data:
-    no, tanim, malz, boyut, adet, kg = nd
+    no, tanim, malz, boyut, bar_adet, kg = nd
     fill_ = ALT if rr%2==0 else WH
-    row_vals = [no, tanim, malz, boyut, adet, kg, "", f"=F{rr}*G{rr}"]
-    for c, v in enumerate(row_vals, 1):
+    for c, v in enumerate([no, tanim, malz, boyut, bar_adet, kg, "", f"=F{rr}*G{rr}"], 1):
         cl = ws11.cell(row=rr, column=c, value=v)
         cl.fill = copy(YEL if c==7 else fill_)
-        cl.font = copy(fn)
+        cl.font = copy(fn9 if c==2 else fn)
         cl.alignment = copy(LA if c==2 else CA)
         cl.border = copy(TB)
+    ws11.row_dimensions[rr].height = 30
     rr += 1
 
 bsec_end = rr - 1
