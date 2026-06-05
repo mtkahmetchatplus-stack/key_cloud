@@ -699,11 +699,11 @@ HDR(ws10, 3, list(range(1,11)),
 
 cost_items = [
     ("GÖVDE","Gövde Sacları (Shell)","S275J2","6-8",16513.0),
-    ("TABAN","Taban Plakaları (Orta)","S275J2","10",11176.7+76.1),
-    ("TABAN","Annüler Plakalar (Kenar)","S275J2","12","dahil"),
+    ("TABAN","Taban Plakaları (Orta 10mm + Annüler 12mm + Strip 5mm)","S275J2","5–12",11176.7),
+    ("TABAN","Drenaj Çukuru (Sump) — Ayrı İmalat Kalemi","S275J2","–",76.1),
     ("TAVAN","Konik Tavan Sacları","S275J2","8",8147.0),
     ("TAVAN İSK.","Çatı İskeleti (UNP+PL+PIP)","S235JR","–",5454.0),
-    ("NOZULLAR","Tüm Nozullar (N1+N4+N7A/B+N8+N9+N18+N19+N21)","A106/A105","–",
+    ("NOZULLAR","Tüm Nozullar + RF Takviye Sacları (N1+N4+N7A/B+N8+N9+N18+N19+N21)","A106/A105/S275J2","–",
      round(68.5+64.5+62.0*2+31.9+2.65+1.7+62+61.1*4,1)),
     ("MANHOLLER","M1+M2+M3 Manhol","S275J2","–",180+132.5+367),
     ("ANKRAJ","Ankraj (16 Komple)","AISI C1030","–",216.0),
@@ -731,12 +731,12 @@ HDR(ws10, r, list(range(1,8)),
     ["İŞLEM TÜRÜ","AÇIKLAMA","MİKTAR","BİRİM","BİRİM FİYAT ★","TUTAR ($)","NOT"], h=30)
 r+=1
 imalat_iscilik=[
-    ("Silindirik Bükme","Gövde Sacları 6mm","31 adet plaka","adet","","","POZ 3×30 + POZ 3A×1  |  1480×6000mm"),
-    ("Silindirik Bükme","Gövde Sacları 8mm","7 adet plaka","adet","","","POZ 1-1E×6 (6000mm) + POZ 2×1 (3997mm)"),
-    ("Konik Bükme","Tavan Sacları 8mm","35 adet sektör","adet","","","POZ 1-9 toplam 35 parça, 1500×6000mm stokundan"),
-    ("Kesim (Plazma/Lazer)","Tüm Plakalar","~37 ton","ton","","","Gövde+Taban+Tavan"),
-    ("Profil Kesim","UNP240/UNP200/L80","~3000 kg","ton","","","Çatı iskeleti"),
-    ("Boru Kesim","PIP 323.9×8 + Nozul boruları","~700 kg","ton","","",""),
+    ("Silindirik Bükme","Gövde Sacları 6mm","31","adet","","","POZ 3×30 + POZ 3A×1  |  1480×6000mm"),
+    ("Silindirik Bükme","Gövde Sacları 8mm","7","adet","","","POZ 1-1E×6 (6000mm) + POZ 2×1 (3997mm)"),
+    ("Konik Bükme","Tavan Sacları 8mm","35","adet","","","POZ 1-9 toplam 35 parça, 1500×6000mm stokundan"),
+    ("Kesim (Plazma/Lazer)","Tüm Ana Sac Plakalar (Gövde+Taban+Tavan+Sump)",35913,"kg","","","16513+11253+8147 = 35913 kg S275J2"),
+    ("Profil Kesim","Yapısal Çelik Çatı İskeleti (UNP+PL+PIP+L)",5454,"kg","","","Çizim TOPLAM = 5454 kg S235JR"),
+    ("Boru Kesim","PIP 323.9×8 + Nozul Boruları (A106 Gr.B)",700,"kg","","","Yaklaşık; kesin ağırlık nozul detay listesinden"),
 ]
 for i,rd in enumerate(imalat_iscilik):
     fill=ALT if i%2==1 else WH
