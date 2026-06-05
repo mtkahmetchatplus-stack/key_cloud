@@ -797,132 +797,189 @@ cl.alignment=CA; cl.border=TB
 sw(ws10,[16,36,16,16,14,14,28,14,14,14])
 
 # ═══════════════════════════════════════════════════════════════════
-# SAYFA 11 – SATINALMA METRAJ ÖZETİ
+# SAYFA 11 – SATINALMA SİPARİŞ TABLOSU (Üreticiye / Tedarikçiye)
 # ═══════════════════════════════════════════════════════════════════
 ws11 = wb.create_sheet("Satınalma Metrajı"); ws11.sheet_view.showGridLines = False
-TITLE(ws11, 1, 1, 8, "7000 Bbl ÜRETİM TANKI  —  NET SATINALMA METRAJ ÖZETİ  (1 TANK)")
+TITLE(ws11, 1, 1, 8, "7000 Bbl ÜRETİM TANKI T-202  —  SATINALMA SİPARİŞ TABLOSU  (1 TANK)")
 
-# ── A. SAC / PLAKA ─────────────────────────────────────────────────
-SUB(ws11, 2, 1, 8, "A. SAC PLAKA — Kalınlık ve Malzeme Sınıfına Göre")
-HDR(ws11, 3, list(range(1,9)),
-    ["#","MALZEME","KALINLIK\n(mm)","KULLANIM YERİ","PARÇA\nADETİ","NET\nAĞIRLIK (kg)",
-     "STANDART STOK ÖNERİSİ","NOTLAR"], h=35)
+# Sütun başlıkları — sabit yapı tüm bölümler için
+def HDR11(ws, r):
+    HDR(ws, r, list(range(1,9)),
+        ["S.NO","TANIM  /  MALZEME","MALZEME\nSINIFI","STOK BOYUT\n(mm)","SİPARİŞ\nADEDİ",
+         "NET AĞIRLIK\n(kg)","BİRİM FİYAT ★\n($/kg)","TOPLAM\n($)"], h=35)
 
-# Gövde
-govde_8mm_wt  = 557.6+557.0+552.3+539.1+414.0+557.6+371.5   # 3549.1
-govde_6mm_wt  = 30*418.2 + 418.0                             # 12964.0
-# Tavan
-tavan_8mm_wt  = 8147.0
-tavan_8mm_cnt = 4+1+1+1+2+4+4+2+1+1+3+1+4+4+2              # 35
-# Taban orta (10mm)
-taban_10mm_wt = 4937.1+628.0+222.0+657.6+222.0+557.0+694.8+348.2  # 8266.7
-taban_10mm_cnt= 7+2+4+3+1+1+2+2                                    # 22
-# Taban annüler (12mm)
-taban_12mm_wt = 2616.6+237.8                                 # 2854.4
-taban_12mm_cnt= 6+1                                          # 7
-# Taban drenaj stripleri (5mm)
-taban_5mm_wt  = 11.4+2.55+36.4+5.18                         # 55.5
-taban_5mm_cnt = 8+1+13+1                                     # 23
+# ── BÖLÜM A: SAC / PLAKA ───────────────────────────────────────────
+SUB(ws11, 2, 1, 8, "A — SAC PLAKA  (S275J2  |  EN 10025-3)")
+HDR11(ws11, 3)
 
-sac_rows = [
-    (1,"S275J2", 6,"Gövde Silindirik Kurslar (POZ 3, 3A)",31,
-     govde_6mm_wt,"32× 1500×6000×6mm (%2 fire)",
-     "1480mm enine kesilecek; 30 adet tam + 1 adet kısmi"),
-    (2,"S275J2", 8,"Gövde Alt Kurs (POZ 1,1A,1B,1C,1D,1E,2)",7,
-     govde_8mm_wt,"7× 1500×6000×8mm",
-     "6 adet 6000mm tam, 1 adet 3997mm kısmi"),
-    (3,"S275J2", 8,"Tavan Konik Sektör Plakaları (POZ 1-9)",tavan_8mm_cnt,
-     tavan_8mm_wt,f"40× 1500×6000×8mm (%15 fire)",
-     "Sektör şekil; 8mm+6mm gövde ile birleşik sipariş önerilir"),
-    ("→","S275J2","8mm TOPLAM","Gövde (7 pk) + Tavan (35 pk) birleşik",42,
-     round(govde_8mm_wt+tavan_8mm_wt,1),"~47 plaka 1500×6000×8mm","★ Sipariş miktarı"),
-    (4,"S275J2",10,"Taban Orta Plakalar (POZ 1-8)",taban_10mm_cnt,
-     round(taban_10mm_wt,1),"12× 1500×6000×10mm",
-     "Büyük plakalardan nested kesim — fire düşük"),
-    (5,"S275J2",12,"Taban Annüler (Çevre) Plakalar (POZ 9, 9A)",taban_12mm_cnt,
-     round(taban_12mm_wt,1),"4× 1500×6000×12mm",
-     "800mm en; 1500mm'lik plakadan boyuna bölünecek"),
-    (6,"S275J2", 5,"Taban Drenaj Strip Parçaları (POZ 10-13)",taban_5mm_cnt,
-     round(taban_5mm_wt,1),"50mm × çeşitli boy şerit",
-     "Atık sacdan kesilebilir"),
-    (None,"S275J2","—","S275J2 TOPLAM SAC AĞIRLIĞI","—",
-     round(govde_6mm_wt+govde_8mm_wt+tavan_8mm_wt+taban_10mm_wt+taban_12mm_wt+taban_5mm_wt,1),
-     "—","★ Ana sac siparişi toplam"),
+# Ağırlık hesapları (çizimden)
+govde_6mm_wt = round(30*418.2 + 418.0, 1)          # 12964.0 kg  (31 parça)
+govde_8mm_wt = round(557.6+557.0+552.3+539.1+414.0+557.6+371.5, 1)  # 3549.1 kg (7 parça)
+tavan_8mm_wt = 8147.0                               # 35 sektör (çizim toplam)
+taban_10mm_wt= round(4937.1+628.0+222.0+657.6+222.0+557.0+694.8+348.2, 1)  # 8266.7 kg
+taban_12mm_wt= round(2616.6+237.8, 1)               # 2854.4 kg
+taban_5mm_wt = round(11.4+2.55+36.4+5.18, 1)        # 55.5 kg
+govde_tavan_8mm_wt = round(govde_8mm_wt + tavan_8mm_wt, 1)  # 11696.1
+
+# (No, Tanım, Malzeme, StokBoyut, SiparisAdet, NetKg)
+sac_data = [
+    (1, "Gövde Silindirik Sac — 2. ile 6. Kurs  (POZ 3, 3A)",
+       "S275J2", "1500 × 6000 × 6",  32, govde_6mm_wt),
+    (2, "Gövde Silindirik Sac — 1. Kurs (Alt)  (POZ 1, 1A–1E, 2)  +  Tavan Konik Sektör  (POZ 1–9)  [Birleşik Sipariş]",
+       "S275J2", "1500 × 6000 × 8",  47, govde_tavan_8mm_wt),
+    (3, "Taban Orta Plakalar  (POZ 1–8)",
+       "S275J2", "1500 × 6000 × 10", 12, taban_10mm_wt),
+    (4, "Taban Annüler (Çevre) Plakalar  (POZ 9, 9A)",
+       "S275J2", "1500 × 6000 × 12",  4, taban_12mm_wt),
+    (5, "Taban Drenaj Strip  (POZ 10–13)  — Atık sacdan kesilebilir",
+       "S275J2", "50 geniş şerit",    1, taban_5mm_wt),
 ]
 
 rr = 4
-for rd in sac_rows:
-    is_tot = rd[0] in ["→", None]
-    fill_ = H2 if is_tot else (ALT if rr%2==0 else WH)
-    fnt_  = fw if is_tot else fn
-    for c,v in enumerate(rd,1):
-        C(ws11, rr, c, v, fill_, fnt_, CA if c!=4 else LA, TB)
+for nd in sac_data:
+    no, tanim, malz, boyut, adet, kg = nd
+    fill_ = ALT if rr%2==0 else WH
+    row_vals = [no, tanim, malz, boyut, adet, kg, "", f"=F{rr}*G{rr}"]
+    for c, v in enumerate(row_vals, 1):
+        cl = ws11.cell(row=rr, column=c, value=v)
+        cl.fill = copy(YEL if c==7 else fill_)
+        cl.font = copy(fn)
+        cl.alignment = copy(LA if c==2 else CA)
+        cl.border = copy(TB)
     rr += 1
 
-# ── B. YAPISAL PROFİL / BORU ───────────────────────────────────────
-rr += 1
-SUB(ws11, rr, 1, 8, "B. YAPISAL PROFİL VE BORU"); rr += 1
-HDR(ws11, rr, list(range(1,8)),
-    ["#","PROFİL / BORU","MALZEME","KULLANIM YERİ","TOPLAM ADET","TOPLAM BOY (mm)","TOPLAM AĞIRLIK (kg)"], h=30)
-rr += 1
-profil_rows = [
-    (1,"UNP240","S235JR","Çatı CK1+CK2 Rafterlar",24,24*5685,"~3732"),
-    (2,"UNP200","S235JR","Çatı CK3 Purlin",24,24*1227,"~744"),
-    (3,"UNP200","S235JR","Çatı CK4 Purlin",24,24*677,"~410"),
-    (4,"PIP 323.9×8 Boru","S235JR","Çatı KL1 Merkezi Kolon",1,9369,580.2),
-    (5,"L60×5 Köşebent","S235JR","Çatı YC1+YC2",24,"~46740","~417"),
-    (6,"⊏ 8×200 (C200×8)","S235JR","Merdiven Borda",8,"çeşitli","~388"),
-    (7,"NPU100","S235JR","Merdiven Basamak",13,"çeşitli","~288"),
-    (8,"L60×6 Köşebent","S235JR","Merdiven Korkuluk/Detay","~100+","çeşitli","~560"),
-    (9,'1 1/4" SCH Boru (Handrail)',"S235JR","Merdiven Korkuluk",1,70000,178.5),
-]
-for i,rd in enumerate(profil_rows):
-    DATA(ws11, rr, list(range(1,8)), rd, alt=(i%2==1)); rr += 1
-
-# ── C. NOZUL BORULARI VE FLANŞLARI ─────────────────────────────────
-rr += 1
-SUB(ws11, rr, 1, 8, "C. NOZUL BORULARI VE FLANŞLARI  (ASTM)"); rr += 1
-HDR(ws11, rr, list(range(1,8)),
-    ["#","MALZEME / TİP","STANDART","KULLANIM YERİ","ADET","AĞIRLIK (kg)","NOTLAR"], h=30)
-rr += 1
-noz_mat = [
-    (1,'12" SCH XS Boru',"ASTM A106 Gr.B","N1+N4+N21","6 adet","~129","2×N1,2×N4 + N21×4"),
-    (2,' 8" SCH XS Boru',"ASTM A106 Gr.B","N8","1 adet","11.4",""),
-    (3,' 6" SCH XS Boru+Dirsek',"ASTM A106+A234WPB","N7A/B","2 komple set","~107.2","Dirsek dahil"),
-    (4,' 1" / 1.5" Boru',"ASTM A106 Gr.B","N9+N18","2 adet","~8",""),
-    (5,'12" 150# SO-RF Flanş',"ASTM A105","N1+N4+N21","6 adet","~174",""),
-    (6,' 8" 150# SO-RF Flanş',"ASTM A105","N8","1 adet",13.5,""),
-    (7,' 6" 150# SO-RF Flanş',"ASTM A105","N7A/B","2 adet",11.8,""),
-    (8,' 1" / 1.5" Flanş',"ASTM A105","N9+N18","2 adet","~5",""),
-]
-for i,rd in enumerate(noz_mat):
-    DATA(ws11, rr, list(range(1,8)), rd, alt=(i%2==1)); rr += 1
-
-# ── D. SAC/PLAKA TOPLAM ÖZET (Satınalma için) ──────────────────────
+# Alt toplam A
+ws11.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=5)
+cl = ws11.cell(row=rr, column=1, value="A TOPLAM  —  S275J2 ANA SAC")
+cl.fill=copy(H1); cl.font=copy(fw); cl.alignment=copy(RA); cl.border=copy(TB)
+tot_s275 = round(govde_6mm_wt+govde_tavan_8mm_wt+taban_10mm_wt+taban_12mm_wt+taban_5mm_wt, 1)
+C(ws11, rr, 6, tot_s275, H1, fw, CA, TB)
+C(ws11, rr, 7, "", H1, fw, CA, TB)
+C(ws11, rr, 8, f"=SUM(H4:H{rr-1})", H1, fw, CA, TB)
 rr += 2
-SUB(ws11, rr, 1, 8, "D. KONSOLİDE AĞIRLIK — Çelik Sınıfına Göre Satınalma Özeti"); rr += 1
-HDR(ws11, rr, [1,2,3,4,5],
-    ["ÇELİK SINIFI","KULLANIM","NET AĞIRLIK (kg)","FİRE PAYI (%3)","SATINALMA (kg)"], h=30)
-rr += 1
-tot_s275j2 = round(govde_6mm_wt+govde_8mm_wt+tavan_8mm_wt+taban_10mm_wt+taban_12mm_wt+taban_5mm_wt,1)
-konsolidat = [
-    ("S275J2","Ana Yapı Sacları (Gövde+Taban+Tavan)",tot_s275j2,
-     round(tot_s275j2*0.03,1),round(tot_s275j2*1.03,1)),
-    ("S235JR","Yapısal (Çatı+Merdiven profil+plakalar)","~7230",
-     "~220","~7450"),
-    ("ASTM A106 Gr.B","Nozul Boruları","~255","–","~260"),
-    ("ASTM A105","Nozul Flanşları","~205","–","~210"),
-    ("A193 Gr.B7 / A194 Gr.2H","Cıvata-Somun-Rondela","–","–","Çizimden sipariş"),
-    ("A 283 Gr.C + S.S. A316L","Mekanik Samandıra","–","–","1 komple set"),
-    ("AISI C1030","Ankraj (16 adet)","216","-","220"),
+
+# ── BÖLÜM B: YAPISAL PROFİL VE BORU ───────────────────────────────
+SUB(ws11, rr, 1, 8, "B — YAPISAL PROFİL / BORU  (S235JR  |  EN 10025-2)"); rr += 1
+HDR11(ws11, rr); rr += 1
+bsec_start = rr
+
+profil_data = [
+    # (No, Tanım, Malzeme, StokBoyut, Adet, NetKg)
+    (1,  "UNP 240 — Çatı Rafteri CK1 + CK2  (24 adet × 5685 mm)",
+         "S235JR", "UNP240 × 12000", 12, 3732.0),
+    (2,  "UNP 200 — Çatı Purlin CK3  (24 adet × 1227 mm)",
+         "S235JR", "UNP200 × 6000",   5,  744.0),
+    (3,  "UNP 200 — Çatı Purlin CK4  (24 adet × 677 mm)",
+         "S235JR", "UNP200 × 6000",   2,  410.4),
+    (4,  "PIP 323.9×8 — Çatı Merkezi Kolon KL1  (1 adet × 9369 mm)",
+         "S235JR", "PIP323.9×8 × 12000", 1, 580.2),
+    (5,  "L 60×5 Köşebent — Çatı YC1+YC2  (24 adet, toplam ~46740 mm)",
+         "S235JR", "L60×5 × 6000",    8,  417.6),
+    (6,  "C 200×8 (UPE200) — Merdiven Borda Kirişi  (8 adet, çeşitli boy)",
+         "S235JR", "200×8 × 9000",    9,  415.7),
+    (7,  "NPU 100 — Merdiven Basamak  (13 adet × ~1080–1179 mm)",
+         "S235JR", "NPU100 × 6000",   3,  288.0),
+    (8,  "L 60×6 Köşebent — Merdiven Korkuluk ve Detaylar  (~100+ parça)",
+         "S235JR", "L60×6 × 6000",   20,  499.6),
+    (9,  '1¼" STD SCH Boru — Merdiven Korkuluk (Handrail)  (70000 mm)',
+         "S235JR", '1¼" SCH × 6000', 12,  178.5),
 ]
-for i,rd in enumerate(konsolidat):
-    fill_ = GRN if i==0 else (ALT if i%2==0 else WH)
-    for c,v in enumerate(rd,1):
-        C(ws11,rr,c,v,fill_,fn,CA if c!=2 else LA,TB)
+
+for nd in profil_data:
+    no, tanim, malz, boyut, adet, kg = nd
+    fill_ = ALT if rr%2==0 else WH
+    row_vals = [no, tanim, malz, boyut, adet, kg, "", f"=F{rr}*G{rr}"]
+    for c, v in enumerate(row_vals, 1):
+        cl = ws11.cell(row=rr, column=c, value=v)
+        cl.fill = copy(YEL if c==7 else fill_)
+        cl.font = copy(fn)
+        cl.alignment = copy(LA if c==2 else CA)
+        cl.border = copy(TB)
     rr += 1
-NOTE(ws11, rr, 1, 8, "★ S275J2 sac siparişi: 6mm (~12964 kg) + 8mm (~11696 kg) + 10mm (~8267 kg) + 12mm (~2854 kg). Net toplam ~35781 kg. %3 fire ile ~36855 kg sipariş önerilir.")
-sw(ws11,[6,18,14,40,12,16,22,24])
+
+bsec_end = rr - 1
+ws11.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=5)
+cl = ws11.cell(row=rr, column=1, value="B TOPLAM  —  S235JR YAPISAL")
+cl.fill=copy(H1); cl.font=copy(fw); cl.alignment=copy(RA); cl.border=copy(TB)
+tot_s235 = sum(r[5] for r in profil_data)
+C(ws11, rr, 6, round(tot_s235,1), H1, fw, CA, TB)
+C(ws11, rr, 7, "", H1, fw, CA, TB)
+C(ws11, rr, 8, f"=SUM(H{bsec_start}:H{bsec_end})", H1, fw, CA, TB)
+rr += 2
+
+# ── BÖLÜM C: NOZUL BORULARI VE FLANŞLARI ──────────────────────────
+SUB(ws11, rr, 1, 8, "C — NOZUL BORU / FLANŞ  (ASTM A106 Gr.B  +  ASTM A105)"); rr += 1
+HDR11(ws11, rr); rr += 1
+csec_start = rr
+
+nozul_data = [
+    # (No, Tanım, Malzeme, StokBoyut, Adet, NetKg)
+    (1,  '12" SCH XS Boru — N1 Giriş + N4 Çıkış + N21 Hava (6 adet × ~223–290 mm)',
+         "ASTM A106 Gr.B", '12" SCH XS × 6000',  1,  129.0),
+    (2,  '8" SCH XS Boru — N8 Köpük Yapıcı  (1 adet × 221 mm)',
+         "ASTM A106 Gr.B", '8" SCH XS × 6000',   1,   11.4),
+    (3,  '6" SCH XS Boru — N7A/B Drain  (2 set: 360+870+540 mm + 90° Dirsek)',
+         "ASTM A106 Gr.B", '6" SCH XS × 6000',   1,   47.2),
+    (4,  '6" SCH XS 90° LR Dirsek — N7A/B Drain  (2 adet)',
+         "ASTM A234 WPB",  '6" SCH XS Elbow',     2,   10.8),
+    (5,  '1½" SCH XS Boru — N9 Sıcaklık  +  1" SCH XS Boru — N18 Seviye',
+         "ASTM A106 Gr.B", '1½"+1" SCH XS × 1000', 2,   1.4),
+    (6,  '12" 150# SO-RF Flanş — N1 + N4 + N21  (6 adet)',
+         "ASTM A105",      '12" 150# SO-RF',       6,  174.0),
+    (7,  '8" 150# SO-RF Flanş — N8  (1 adet)',
+         "ASTM A105",      '8" 150# SO-RF',        1,   13.5),
+    (8,  '6" 150# SO-RF Flanş — N7A/B  (2 adet)',
+         "ASTM A105",      '6" 150# SO-RF',        2,   11.8),
+    (9,  '1½" 150# SO-RF Flanş — N9  +  1" 150# SO-RF Flanş — N18  (2 adet)',
+         "ASTM A105",      '1½"+1" 150# SO-RF',   2,    2.95),
+]
+
+for nd in nozul_data:
+    no, tanim, malz, boyut, adet, kg = nd
+    fill_ = ALT if rr%2==0 else WH
+    row_vals = [no, tanim, malz, boyut, adet, kg, "", f"=F{rr}*G{rr}"]
+    for c, v in enumerate(row_vals, 1):
+        cl = ws11.cell(row=rr, column=c, value=v)
+        cl.fill = copy(YEL if c==7 else fill_)
+        cl.font = copy(fn)
+        cl.alignment = copy(LA if c==2 else CA)
+        cl.border = copy(TB)
+    rr += 1
+
+csec_end = rr - 1
+ws11.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=5)
+cl = ws11.cell(row=rr, column=1, value="C TOPLAM  —  ASTM BORU + FLANŞ")
+cl.fill=copy(H1); cl.font=copy(fw); cl.alignment=copy(RA); cl.border=copy(TB)
+tot_astm = sum(r[5] for r in nozul_data)
+C(ws11, rr, 6, round(tot_astm,1), H1, fw, CA, TB)
+C(ws11, rr, 7, "", H1, fw, CA, TB)
+C(ws11, rr, 8, f"=SUM(H{csec_start}:H{csec_end})", H1, fw, CA, TB)
+rr += 2
+
+# ── GENEL TOPLAM ───────────────────────────────────────────────────
+ws11.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=5)
+cl = ws11.cell(row=rr, column=1,
+    value="GENEL TOPLAM  (A + B + C)  —  Birim Fiyatlar Girildiğinde Otomatik Hesaplanır")
+cl.fill=copy(H1); cl.font=copy(fwl); cl.alignment=copy(RA); cl.border=copy(MB)
+tot_all = round(tot_s275 + tot_s235 + tot_astm, 1)
+C(ws11, rr, 6, tot_all, H1, fwl, CA, MB)
+C(ws11, rr, 7, "", H1, fwl, CA, MB)
+# Toplam formülü: A+B+C alt toplam hücreleri
+a_tot_row = 4 + len(sac_data) + 1    # A toplam satır no
+b_tot_row = a_tot_row + 2 + 1 + len(profil_data) + 1
+c_tot_row = b_tot_row + 2 + 1 + len(nozul_data) + 1
+C(ws11, rr, 8, f"=H{a_tot_row}+H{b_tot_row}+H{c_tot_row}", H1, fwl, CA, MB)
+rr += 1
+
+# Not satırı
+ws11.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=8)
+cl = ws11.cell(row=rr, column=1,
+    value="★ G sütununa (BİRİM FİYAT) $/kg değeri giriniz. "
+          "Bölüm D malzemeleri (Cıvata/Somun/Rondela, Samandıra, Ankraj) ayrıca fiyatlandırılacaktır.")
+cl.fill=copy(YEL); cl.font=copy(Font(bold=True, size=10, color="FF0000"))
+cl.alignment=copy(CA); cl.border=copy(TB)
+
+sw(ws11, [6, 56, 18, 22, 10, 14, 14, 14])
 
 out = "/home/user/key_cloud/7000Bbl_Tank_Malzeme_ve_Maliyet.xlsx"
 wb.save(out)
